@@ -1,0 +1,34 @@
+---
+dependency:
+  name: galaxy
+lint: |
+  set -e
+  yamllint .
+  ansible-lint . -x meta-incorrect,meta-no-info,package-latest,risky-file-permissions
+driver:
+  name: podman
+platforms:
+  - name: instance
+    image: docker.io/redhat/ubi8:latest
+    pre_build_image: true
+    published_ports:
+      - 0.0.0.0:18080:8080/tcp
+provisioner:
+  name: ansible
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy

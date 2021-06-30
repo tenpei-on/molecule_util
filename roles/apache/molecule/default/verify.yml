@@ -1,0 +1,20 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Fetch a virtual host site content from web server
+      uri:
+        url: "http://127.0.0.1:18080"
+        return_content: true
+        status_code: 200
+      register: check_vhost_result
+      delegate_to: localhost
+
+    - name: Check a site status of virtual host
+      assert:
+        that:
+          - check_vhost_result.status == 200
+            #- check_vhost_result.content | regex_search('Hello World!!')
+          - check_vhost_result.content | regex_search('Hello World Message')

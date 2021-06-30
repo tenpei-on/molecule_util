@@ -1,0 +1,35 @@
+---
+- name: Install httpd
+  dnf:
+    name: httpd
+    state: latest
+
+- name: Check apache process if it is run
+  pids:
+    name: httpd
+  register: apache_process_result
+
+- name: Start apache if it isn't run
+  command: /usr/sbin/apachectl -k start
+  when:
+    - apache_process_result.pids | length == 0
+
+- name: Make sure if vhost directory is present
+  file:
+    path: "/var/www/vhosts/{{ ansible_hostname }}"
+    state: directory
+
+- name: Copy sample html content
+  copy:
+    src: index.html
+    dest: "/var/www/vhosts/{{ ansible_hostname }}"
+
+- name: Generate vhost configuration file
+  template:
+    src: vhost.conf.j2
+    dest: /etc/httpd/conf.d/vhost.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart_httpd

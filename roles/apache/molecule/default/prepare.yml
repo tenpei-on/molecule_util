@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: Install iproute
+      dnf:
+        name:
+          - python36
+          - python3-psutil
+          - iproute
+        state: present

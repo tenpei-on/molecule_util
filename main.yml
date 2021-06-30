@@ -1,0 +1,6 @@
+---
+- name: apache operation
+  hosts: all
+  gather_facts: true
+  roles:
+    - apache
