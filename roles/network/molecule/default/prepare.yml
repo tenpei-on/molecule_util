@@ -1,0 +1,14 @@
+---
+- name: Prerequirement
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Install NetworkManager
+      yum:
+        name: NetworkManager
+        state: present
+
+    - name: Start and NetworkManager
+      service:
+        name: NetworkManager
+        state: started

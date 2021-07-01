@@ -1,0 +1,19 @@
+---
+dependency:
+  name: galaxy
+lint: |
+  set -e
+  yamllint .
+  ansible-lint . -x meta-incorrect,meta-no-info,package-latest,risky-file-permissions
+driver:
+  name: podman
+platforms:
+  - name: instance
+    image: centos:latest
+    pre_build_image: true
+    privileged: true
+    command: /sbin/init
+provisioner:
+  name: ansible
+verifier:
+  name: ansible

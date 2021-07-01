@@ -1,0 +1,4 @@
+---
+- name: Create Network Interface connection
+  debug:
+    msg: hoge
